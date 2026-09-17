@@ -64,6 +64,35 @@ Open your browser at `http://localhost:8501`
 
 ---
 
+## 🧪 Instructions for Testing
+
+### Quick test (no camera required)
+1. Run `streamlit run app.py`
+2. Click **🎭 Demo Mode**
+3. Verify that:
+   - 3 simulated violations (No Helmet, Triple Riding, Red Light Jump) appear on the annotated frame
+   - The alert banner shows "3 Violations Detected"
+   - **Live Statistics** counters update accordingly
+   - 3 new rows appear in the **Detection Log** tab
+   - 3 new PDF challans appear in the **Saved Challans** tab and can be downloaded
+
+### Live camera test
+1. Connect a webcam
+2. Click **▶ Start Camera**
+3. Adjust the **Confidence Threshold** slider and confirm detections change sensitivity
+4. Toggle items in **Active Violations** and confirm only selected violation types are flagged
+5. Click **⏹ Stop Feed** / **⏹ Stop** and confirm the camera releases cleanly (no crash, no hung process)
+
+### Component-level checks
+- `detector.py`: run with a sample image/frame and confirm `ViolationDetector().detect()` returns a list of dicts with `type`, `confidence`, `box`, and `plate` keys
+- `challan_generator.py`: call `generate_challan()` directly with dummy values and confirm a valid PDF is created in `challans/`
+- Confirm `logs/detections.csv` is created/appended correctly after each detection
+
+### Edge cases to verify
+- App still runs if Tesseract OCR is not installed (falls back to a simulated plate number)
+- App still runs if no GPU/YOLO weights are available (falls back gracefully)
+- App shows a clear error message if no webcam is detected, instead of crashing
+
 ## 🎮 How to Use
 
 ### With a webcam:
@@ -156,3 +185,4 @@ Built as a **Bring Your Own Project (BYOP)** submission for the Computer Vision 
 ## 📄 License
 
 MIT License – free to use and modify.
+
